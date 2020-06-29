@@ -13,11 +13,10 @@
     <button style="margin: 20px;" class="dropbtn">Patient</button>
     <div class="dropdown-content">
       <a href="{{url_for('patient_register')}}">Create Patient</a>
-      <a href="">Update Patient</a>
-      <a href="">Delete Patient</a>
-      <a href="#">View Patient List</a>
-      <a href="#">Search for Patient</a>
-      <a href="#">Final Billing</a>
+      <a href="{{url_for('patient_update')}}">Update Patient</a>
+      <a href="{{url_for('patient_delete')}}">Delete Patient</a>
+      <a href="{{url_for('patient_list')}}">View Patient List</a>
+      <a href="{{url_for('patient_view')}}">Search for Patient</a>
 
     </div>
   </div>
