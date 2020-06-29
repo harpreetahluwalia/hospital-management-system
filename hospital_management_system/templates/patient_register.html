@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Patient Registration
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-5 mx-auto mt-3 shadow rounded border">
+			{% with messages = get_flashed_messages() %}
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert alert-success mt-3">{{message}}</div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+			<h2 class="text-center my-2">Patient Registration</h2>
+			<form action="">
+				<div class="form-group">
+					<label for="PatientSSN"><b>Patient SSN ID*</b></label>
+	 				<input type="text" placeholder="Enter SSN ID" name="PatientSSN" id="PatientSSN" required class="form-control">
+				</div>
+				<div class="form-group">
+					<label for="PatientName"><b>Patient Name*</b></label>
+	  				<input class="form-control" type="text" placeholder="Enter patient's name" name="PatientName" id="PatientName" required>
+				</div>
+				<div class="form-group">
+					<label for="PatientAge"><b>Patient Age*</b></label>
+	 		 		<input class="form-control" type="number" placeholder="Enter patient's age" name="PatientAge" id="PatientAge" required>
+				</div>
+				<div class="form-group">
+					<label for="DateOfAdmin"><b>Date of Admission*</b></label>
+	 	 			<input class="form-control" type="date" value="{{data.today_date}}" name="DateOfAdmin" id="DateOfAdmin" required>
+				</div>
+				<div class="form-group">
+					<label for="Bed"><b>Type of Bed*</b></label>
+					<select class="form-control" name="Bed" id="Bed" required>
+					<option value="">--Select--</option>
+					<option value="GeneralWard">General Ward</option>
+					<option value="SemiSharing">Semi Sharing</option>
+					<option value="SingleRoom">Single Room</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="Address"><b>Address*</b></label>
+					<textarea class="form-control" rows = "5" cols = "50" name = "Address" id="Address" required>
+					</textarea>
+				</div>
+				<div class="form-group">
+					<label for="State"><b>State*</b></label>
+	  				<input class="form-control" type="text"  name="State" id="State" required>
+				</div>
+				<div class="form-group">
+					<label for="City"><b>City*</b></label>
+	  				<input class="form-control" type="text" name="City" id="City" required>
+				</div>
+				<div class="form-group text-right">
+					<button class="btn btn-success" type="submit" value="submit">Submit</button>
+	  				<button class="btn btn-warning" type="reset" value="reset">Reset</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+
+

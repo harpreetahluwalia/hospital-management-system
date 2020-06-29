@@ -17,6 +17,14 @@ class User(db.Model):
     #     return check_password_hash(self.password, password)
 
 class Patient(db.Model):
+    __table_args__ = {'sqlite_autoincrement': True}
     id = db.Column(db.Integer, primary_key=True)
-    ssid = db.Column(db.String(80), unique=True, nullable=False)
-    name = db.Column(db.String(80), unique=True, nullable=False)
+    ssid = db.Column(db.String(250), unique=True, nullable=False)
+    name = db.Column(db.String(80), nullable=False)
+    age = db.Column(db.Integer, nullable=False)
+    date_of_admission = db.Column(db.DateTime, default=datetime.now().date())
+    type_of_bed = db.Column(db.String(80), nullable=False)
+    address = db.Column(db.String(250), nullable=False)
+    city = db.Column(db.String(250), nullable=False)
+    state = db.Column(db.String(250), nullable=False)
+    status = db.Column(db.String(100), nullable=False)

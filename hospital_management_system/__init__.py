@@ -9,8 +9,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config.from_object(Config)
 
 db = SQLAlchemy(app)
-
 db.create_all()
+db.session.commit()
 
 from hospital_management_system import routes
 
