@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <title>HMS</title>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+  <div class="collapse navbar-collapse justify-content-md-center">
+      <b><h1 style="color:white">Hospital Management System</h1></b>
+  </div>
+</nav>
+
+<form action="/action_page.php">  <! replace action_page.php with appropriate page name>
+  <div class="container">
+  <center>
+    <h2> Patient Registration</h2>
+	
+    <hr>
+
+    <label for="PatientSSN"><b>Patient SSN ID*</b></label>
+    <input type="text" placeholder="Enter SSN ID" name="PatientSSN" id="PatientSSN" required>
+	</br></br>
+
+
+    <label for="PatientName"><b>Patient Name*</b></label>
+    <input type="text" placeholder="Enter patient's name" name="PatientName" id="PatientName" required>
+	</br></br>
+
+	<label for="PatientAge"><b>Patient Age*</b></label>
+    <input type="text" placeholder="Enter patient's age" name="PatientAge" id="PatientAge" required>
+	</br></br>
+	
+	<label for="DateOfAdmin"><b>Date of Admission*</b></label>
+    <input type="text" name="DateOfAdmin" id="DateOfAdmin" required>
+	</br></br>
+	
+	
+	
+	
+
+	
+	<label for="Bed"><b>Type of Bed*</b></label>
+	<select name="Bed" id="Bed" required>
+	<option value="">Select</option>
+	<option value="GeneralWard">General Ward</option>
+	<option value="SemiSharing">Semi Sharing</option>
+	<option value="SingleRoom">Single Room</option>
+	</select>
+	</br></br>
+	
+	<label for="Address"><b>Address*</b></label>
+	<textarea rows = "5" cols = "50" name = "Address" id="Address" required>
+	</textarea>
+	</br></br> 
+	
+	<label for="State"><b>State*</b></label>
+    <input type="text"  name="State" id="State" required>
+	</br></br> 
+	
+	
+	<label for="City"><b>City*</b></label>
+    <input type="text" name="City" id="City" required>
+	</br></br> 
+	
+
+    <button type="submit" value="submit">Submit</button>
+    <button type="reset" value="reset">Reset</button>
+	</center>
+  </div>
+  
+  
+</form>
+
+</body>
+</html>

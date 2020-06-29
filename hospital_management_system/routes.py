@@ -32,6 +32,18 @@ def logout():
     session["username"] = False
     return redirect("/login")
 
+@app.route("/registration")
+def registration():
+    return render_template('registration.html', Login=True)
+
+@app.route("/update")
+def update():
+    return render_template('update.html', Login=True)
+
+@app.route("/delete")
+def delete():
+    return render_template('delete.html', Login=True)
+
 # @app.route('/signup')
 # def signup():
 #     admin = User(user_id=1, username="admin", password="admin")
