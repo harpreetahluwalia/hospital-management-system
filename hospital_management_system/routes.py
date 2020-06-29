@@ -52,10 +52,14 @@ def patient_register():
         address = request.form.get("Address")
         state = request.form.get("State")
         city = request.form.get("City")
-        
-        patient = Patient(ssid=p_id, name=p_name, age=age, date_of_admission=date, type_of_bed=bed, address=address, state=state, city=city, status="Active")
-        db.session.add(patient)
-        db.session.commit()
+        if len(Patient.query.all()) > 0:
+            patient = Patient(ssid=p_id, name=p_name, age=age, date_of_admission=date, type_of_bed=bed, address=address, state=state, city=city, status="Active")
+            db.session.add(patient)
+            db.session.commit()
+        else:
+            patient = Patient(id=1000000000,ssid=p_id, name=p_name, age=age, date_of_admission=date, type_of_bed=bed, address=address, state=state, city=city, status="Active")
+            db.session.add(patient)
+            db.session.commit()
 
         flash("Successfully Patient Added!!")
 
