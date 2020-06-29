@@ -16,7 +16,7 @@
               {% endfor %}
             {% endif %}
           {% endwith %}
-			<h2 class="text-center my-2">Patient Delete</h2>
+			<h2 class="text-center my-2">Delete Patient</h2>
 			<form action="" method="POST">
 				<div class="form-group">
 					<label for="PatientId"><b>Patient ID*</b></label> <small class="ml-5 text-danger" id="result"></small>
@@ -54,11 +54,11 @@
 				</div>
 				<div class="form-group">
 					<label for="State"><b>State*</b></label>
-	  				<input  class="form-control" type="text"  name="State" id="State" required>
+	  				<input pattern="[a-zA-Z]*" oninvalid="setCustomValidity('Please enter on alphabets only. ')"  class="form-control" type="text"  name="State" id="State" required>
 				</div>
 				<div class="form-group">
 					<label for="City"><b>City*</b></label>
-	  				<input class="form-control" type="text" name="City" id="City" required>
+	  				<input pattern="[a-zA-Z]*" oninvalid="setCustomValidity('Please enter on alphabets only. ')" class="form-control" type="text" name="City" id="City" required>
 				</div>
 				<div class="form-group text-center">
 					<button class="btn btn-danger" id="submit" type="submit" disabled>Delete</button>
