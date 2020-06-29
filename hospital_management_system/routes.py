@@ -57,7 +57,7 @@ def patient_register():
             db.session.add(patient)
             db.session.commit()
         else:
-            patient = Patient(id=1000000000,ssid=p_id, name=p_name, age=age, date_of_admission=date, type_of_bed=bed, address=address, state=state, city=city, status="Active")
+            patient = Patient(id=100000000,ssid=p_id, name=p_name, age=age, date_of_admission=date, type_of_bed=bed, address=address, state=state, city=city, status="Active")
             db.session.add(patient)
             db.session.commit()
 
@@ -100,16 +100,15 @@ def patient_update():
             status = "Active"
         )
         patient = Patient.query.filter_by(id=p_id).update(data)
-        
         db.session.commit()
-
         flash("Successfully Patient Updated!!")
-
     return render_template("patient_update.html", patient="active")
 
 @app.route("/get_patient", methods=["GET","POST"])
 def get_patient():
     data={}
+    if not session.get("username"):
+        return redirect("/login")
     if "pid" in request.args:
         pid = request.args.get("pid")
         patient = Patient.query.filter_by(id=pid).first()
@@ -131,6 +130,8 @@ def get_patient():
 @app.route("/check_patient", methods=["GET","POST"])
 def check_patient():
     data={}
+    if not session.get("username"):
+        return redirect("/login")
     if "pssn" in request.args:
         pssn = request.args.get("pssn")
         patient = Patient.query.filter_by(ssid=pssn).first()
@@ -139,3 +140,15 @@ def check_patient():
         else:
             data["status"] = True
     return jsonify(data)
+
+@app.route("/patient_delete", methods=["GET","POST"])
+def patient_delete():
+    if not session.get("username"):
+        return redirect("/login")
+    if request.method == "POST":
+        p_id = request.form.get("PatientId")
+        patient = Patient.query.filter_by(id=p_id).first()
+        db.session.delete(patient)
+        db.session.commit()
+        flash("Successfully Patient Deleted!!")
+    return render_template("patient_delete.html", patient="active")
