@@ -126,3 +126,16 @@ def get_patient():
         else:
             data["status"] = False
     return jsonify(data)
+
+
+@app.route("/check_patient", methods=["GET","POST"])
+def check_patient():
+    data={}
+    if "pssn" in request.args:
+        pssn = request.args.get("pssn")
+        patient = Patient.query.filter_by(ssid=pssn).first()
+        if patient:
+            data["status"] = False
+        else:
+            data["status"] = True
+    return jsonify(data)

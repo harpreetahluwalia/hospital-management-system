@@ -61,7 +61,7 @@
 	  				<input class="form-control" type="text" name="City" id="City" required>
 				</div>
 				<div class="form-group text-center">
-					<button class="btn btn-success" type="submit" value="submit">Update</button>
+					<button class="btn btn-success" id="submit" type="submit" value="submit">Update</button>
 				</div>
 			</form>
 		</div>
@@ -88,6 +88,7 @@
 				}
 				else{
 					$("#result").html("* Patient Id is not exist! Please try again *")
+					
 				}
 			}
         })
