@@ -22,7 +22,7 @@ class Patient(db.Model):
     ssid = db.Column(db.String(250), unique=True, nullable=False)
     name = db.Column(db.String(80), nullable=False)
     age = db.Column(db.Integer, nullable=False)
-    date_of_admission = db.Column(db.DateTime, default=datetime.now().date())
+    date_of_admission = db.Column(db.Date, nullable=False)
     type_of_bed = db.Column(db.String(80), nullable=False)
     address = db.Column(db.String(250), nullable=False)
     city = db.Column(db.String(250), nullable=False)

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Patient List
+{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 shadow-sm rounded border mt-2">
+                <h3 class="text-center my-2">View Patients</h3>
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th class="text-center">Patient Id</th>
+                            <th class="text-center">Name</th>
+                            <th class="text-center">Age</th>
+                            <th class="text-center">Address</th>
+                            <th class="text-center">DOJ</th>
+                            <th class="text-center">Type of Room</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in patients %}
+                            <tr>
+                                <td class="text-center">{{i.id}}</td>
+                                <td class="text-center">{{i.name}}</td>
+                                <td class="text-center">{{i.age}}</td>
+                                <td class="text-center">{{i.address}}, {{i.city}}, {{i.state}}</td>
+                                <td class="text-center">{{i.date_of_admission}}</td>
+                                <td class="text-center">{{i.type_of_bed}}</td>
+                            </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+

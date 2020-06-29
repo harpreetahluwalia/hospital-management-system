@@ -1,19 +1,16 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand font-weight-bolder" href="#">Hospital Management</a>
+    <a class="navbar-brand font-weight-bolder" href="{{url_for('home')}}">Hospital Management</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-<<<<<<< HEAD
       <ul class="navbar-nav mr-auto">
+        {% if Login %}
+        {% else %}
         <li class="nav-item {{patient}}">
-          <a class="nav-link" href="{{url_for('patient')}}">Patient</a>
-=======
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item active">
-          <a class="nav-link font-weight-bolder h4" href="#">Hospital Management System</a>
->>>>>>> f5b4938288f54abbb6ac8d91650fd3f1297af6cd
+          <a class="nav-link" href="">Patient</a>
         </li>
+        {% endif %}
       </ul>
       <ul class="navbar-nav ml-auto">
         {% if Login %}

@@ -17,7 +17,7 @@
             {% endif %}
           {% endwith %}
 			<h2 class="text-center my-2">Patient Registration</h2>
-			<form action="">
+			<form action="" method="POST">
 				<div class="form-group">
 					<label for="PatientSSN"><b>Patient SSN ID*</b></label>
 	 				<input type="text" placeholder="Enter SSN ID" name="PatientSSN" id="PatientSSN" required class="form-control">
@@ -45,8 +45,7 @@
 				</div>
 				<div class="form-group">
 					<label for="Address"><b>Address*</b></label>
-					<textarea class="form-control" rows = "5" cols = "50" name = "Address" id="Address" required>
-					</textarea>
+					<textarea class="form-control" rows = "5" cols = "50" name = "Address" id="Address" required></textarea>
 				</div>
 				<div class="form-group">
 					<label for="State"><b>State*</b></label>

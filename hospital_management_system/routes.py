@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, flash, session
+from flask import render_template, request, redirect, flash, session, jsonify
 from hospital_management_system.models import User, Patient
 from hospital_management_system import app, db
 from datetime import datetime
@@ -35,14 +35,8 @@ def logout():
     session["username"] = False
     return redirect("/login")
 
-<<<<<<< HEAD
-@app.route("/patient")
-def patient():
-    if not session.get("username"):
-        return redirect("/login")
-    return render_template("patient_base.html", patient="active")
 
-@app.route("/patient_register")
+@app.route("/patient_register", methods=["GET","POST"])
 def patient_register():
     data = {}
     if not session.get("username"):
@@ -53,6 +47,7 @@ def patient_register():
         p_name = request.form.get("PatientName")
         age = request.form.get("PatientAge")
         date = request.form.get("DateOfAdmin")
+        date = datetime.strptime(date,'%Y-%m-%d')
         bed = request.form.get("Bed")
         address = request.form.get("Address")
         state = request.form.get("State")
@@ -65,30 +60,65 @@ def patient_register():
         flash("Successfully Patient Added!!")
 
     return render_template("patient_register.html", patient="active", data=data)
-=======
-@app.route("/registration")
-def registration():
-    return render_template('registration.html', Login=True)
 
-@app.route("/update")
-def update():
-    return render_template('update.html', Login=True)
+@app.route("/patient_list")
+def patient_list():
+    if not session.get("username"):
+        return redirect("/login")
 
-@app.route("/delete")
-def delete():
-    return render_template('delete.html', Login=True)
-
-# @app.route('/signup')
-# def signup():
-#     admin = User(user_id=1, username="admin", password="admin")
-#     db.session.add(admin)
-#     db.session.commit()
-#     return "abc"
->>>>>>> f5b4938288f54abbb6ac8d91650fd3f1297af6cd
-
-
-
-
-
-
+    patients = Patient.query.all()
     
+    return render_template("patient_list.html", patient="active", patients=patients)
+
+@app.route("/patient_update", methods=["GET","POST"])
+def patient_update():
+    if not session.get("username"):
+        return redirect("/login")
+    if request.method == "POST":
+        p_id = request.form.get("PatientId")
+        p_name = request.form.get("PatientName")
+        age = request.form.get("PatientAge")
+        date = request.form.get("DateOfAdmin")
+        date = datetime.strptime(date,'%Y-%m-%d')
+        bed = request.form.get("Bed")
+        address = request.form.get("Address")
+        state = request.form.get("State")
+        city = request.form.get("City")
+        
+        data = dict(
+            name = p_name, 
+            age = age, 
+            date_of_admission = date, 
+            type_of_bed = bed, 
+            address = address, 
+            state = state, 
+            city = city, 
+            status = "Active"
+        )
+        patient = Patient.query.filter_by(id=p_id).update(data)
+        
+        db.session.commit()
+
+        flash("Successfully Patient Updated!!")
+
+    return render_template("patient_update.html", patient="active")
+
+@app.route("/get_patient", methods=["GET","POST"])
+def get_patient():
+    data={}
+    if "pid" in request.args:
+        pid = request.args.get("pid")
+        patient = Patient.query.filter_by(id=pid).first()
+        if patient:
+            data["status"] = True
+            #data["id"] = patient.id
+            data["name"] = patient.name
+            data["age"] = patient.age
+            data["date"] = str(patient.date_of_admission)
+            data["address"] = patient.address
+            data["city"] = patient.city
+            data["state"] = patient.state
+            data["bed"] = patient.type_of_bed
+        else:
+            data["status"] = False
+    return jsonify(data)
