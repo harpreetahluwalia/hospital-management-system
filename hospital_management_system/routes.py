@@ -35,6 +35,7 @@ def logout():
     session["username"] = False
     return redirect("/login")
 
+<<<<<<< HEAD
 @app.route("/patient")
 def patient():
     if not session.get("username"):
@@ -64,6 +65,26 @@ def patient_register():
         flash("Successfully Patient Added!!")
 
     return render_template("patient_register.html", patient="active", data=data)
+=======
+@app.route("/registration")
+def registration():
+    return render_template('registration.html', Login=True)
+
+@app.route("/update")
+def update():
+    return render_template('update.html', Login=True)
+
+@app.route("/delete")
+def delete():
+    return render_template('delete.html', Login=True)
+
+# @app.route('/signup')
+# def signup():
+#     admin = User(user_id=1, username="admin", password="admin")
+#     db.session.add(admin)
+#     db.session.commit()
+#     return "abc"
+>>>>>>> f5b4938288f54abbb6ac8d91650fd3f1297af6cd
 
 
 

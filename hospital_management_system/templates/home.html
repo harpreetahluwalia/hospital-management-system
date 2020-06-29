@@ -4,6 +4,40 @@
   Home
 {% endblock %}
 
+{% block linkcss %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dropdown.css') }}">
+{% endblock %}
 {% block body %}
-  <h1>Home</h1>
+  <center><h1>Home</h1>
+  <div class="dropdown">
+    <button style="margin: 20px;" class="dropbtn">Patient</button>
+    <div class="dropdown-content">
+      <a href="{{url_for('registration')}}">Create Patient</a>
+      <a href="{{url_for('update')}}">Update Patient</a>
+      <a href="{{url_for('delete')}}">Delete Patient</a>
+      <a href="#">View Patient List</a>
+      <a href="#">Search for Patient</a>
+      <a href="#">Final Billing</a>
+
+    </div>
+  </div>
+
+  <div class="dropdown">
+    <button style="margin: 20px;" class="dropbtn">Pharmacy</button>
+    <div class="dropdown-content">
+      <a href="#">Issue Medicines</a>
+  
+    </div>
+  </div>
+
+  <div class="dropdown">
+    <button style="margin: 20px;" class="dropbtn">Diagnostics</button>
+    <div class="dropdown-content">
+      <a href="#">Add diagnostics</a>
+  
+    </div>
+  </div>
+
+</center>
+
 {% endblock %}
