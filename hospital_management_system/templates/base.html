@@ -8,17 +8,25 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
     <title>
+
         {% block title %}
         {% endblock %}
     </title>
 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dropdown.css') }}">
     {% block linkcss %}
     {% endblock %}
+
+
+    
+
 
 </head>
 <body>
     {% include 'header.html' %}
 
+
+    
     {% block body %}
     {% endblock %}
 </body>
