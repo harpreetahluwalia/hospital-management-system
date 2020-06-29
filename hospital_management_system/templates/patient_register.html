@@ -20,7 +20,8 @@
 			<form action="" method="POST">
 				<div class="form-group">
 					<label for="PatientSSN"><b>Patient SSN ID*</b></label>
-	 				<input type="text" placeholder="Enter SSN ID" name="PatientSSN" id="PatientSSN" required class="form-control">
+	 				<input type="text" placeholder="Enter SSN ID" name="PatientSSN" id="PatientSSN" min="210000000" max="999999999" 
+					       required class="form-control">
 				</div>
 				<div class="form-group">
 					<label for="PatientName"><b>Patient Name*</b></label>
@@ -28,7 +29,8 @@
 				</div>
 				<div class="form-group">
 					<label for="PatientAge"><b>Patient Age*</b></label>
-	 		 		<input class="form-control" type="number" placeholder="Enter patient's age" name="PatientAge" id="PatientAge" required>
+	 		 		<input class="form-control" type="number" placeholder="Enter patient's age" name="PatientAge" min="1" max="200" id="PatientAge" 
+					       required>
 				</div>
 				<div class="form-group">
 					<label for="DateOfAdmin"><b>Date of Admission*</b></label>
