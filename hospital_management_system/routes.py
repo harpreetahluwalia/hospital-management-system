@@ -152,7 +152,7 @@ def patient_delete():
         db.session.commit()
         flash("Successfully Patient Deleted!!")
     return render_template("patient_delete.html", patient="active")
-
+#Search
 @app.route("/patient_view", methods=["GET","POST"])
 def patient_view():
     if not session.get("username"):
