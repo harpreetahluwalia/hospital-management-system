@@ -112,9 +112,16 @@ input[type=number] {
                         </table>
                         <div class="text-center">
                             <!-- Button trigger modal -->
+                            {% if data["found"] %}
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#issue">
                                 Issue Medicine
                             </button>
+                            {% else %}
+                            <button disabled type="button" class="btn btn-primary" data-toggle="modal" data-target="#issue">
+                                Issue Medicine
+                            </button>
+                            {% endif %}
+                            
                         </div>
                         <br>
                         <br>

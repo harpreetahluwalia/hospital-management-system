@@ -162,6 +162,7 @@ def patient_view():
 
 @app.route("/issue_medicines", methods=["GET","POST"])
 def issue_medicines():
+    data = {}
     if not session.get("username"):
         return redirect("/login")
     meds = Medicines.query.all()
@@ -172,6 +173,7 @@ def issue_medicines():
         if patient:
             med_is = MedicinesIssued.query.filter_by(p_id=p_id)
             flash("Patient Found Successfully!")
+            data["found"] = True
         else:
             patient = ["id", "name", "age", "address", "doj", "type of room"]
             flash("Patient With this Id not found!!")
@@ -204,7 +206,7 @@ def issue_medicines():
         if "update" in request.form.keys():
             flash("Medicines issued successfully!!")
 
-    return render_template("issueMedicines.html", meds=meds, patient=patient, med_is=med_is)
+    return render_template("issueMedicines.html", meds=meds, patient=patient, med_is=med_is, data=data)
 
 @app.route("/check_med", methods=["GET","POST"])
 def check_med():
