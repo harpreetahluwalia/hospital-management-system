@@ -165,7 +165,7 @@ def issue_medicines():
     if not session.get("username"):
         return redirect("/login")
     meds = Medicines.query.all()
-    
+    med_is = ""
     if "pid" in request.args.keys():
         p_id = request.args.get("pid")
         patient = Patient.query.filter_by(id=p_id).first()
