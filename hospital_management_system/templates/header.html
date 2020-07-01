@@ -9,7 +9,7 @@
         {% else %}
        
         <div class="dropdown">
-          <a href="{{url_for('home')}}"><button style="margin: 20px;" class="dropbtn">Home</button>
+          <a href="{{url_for('home')}}"><button style="padding: 10px; margin: 5px;" class="dropbtn">Home</button>
           <div class="dropdown-content">
         
           </div>
@@ -17,7 +17,7 @@
 
 
         <div class="dropdown">
-          <button style="margin: 20px;" class="dropbtn">Patient</button>
+          <a href="{{url_for('patient_list')}}"><button style="padding: 10px; margin: 5px;" class="dropbtn">Patient</button></a>
           <div class="dropdown-content">
             <a href="{{url_for('patient_register')}}">Create Patient</a>
             <a href="{{url_for('patient_update')}}">Update Patient</a>
@@ -29,7 +29,7 @@
         </div>
       
         <div class="dropdown">
-          <button style="margin: 20px;" class="dropbtn">Pharmacy</button>
+          <button style="padding: 10px; margin: 5px;" class="dropbtn">Pharmacy</button>
           <div class="dropdown-content">
             <a href="{{url_for('issue_medicines')}}">Issue Medicines</a>
         
@@ -37,7 +37,7 @@
         </div>
       
         <div class="dropdown">
-          <button style="margin: 20px;" class="dropbtn">Diagnostics</button>
+          <button style="padding: 10px; margin: 5px;" class="dropbtn">Diagnostics</button>
           <div class="dropdown-content">
             <a href="#">Add diagnostics</a>
         
@@ -52,9 +52,15 @@
       <ul class="navbar-nav ml-auto">
         {% if Login %}
         {% else %}
-          <li class="nav-item active">
-            <a class="nav-link" href="{{url_for('logout')}}">Logout</a>
-          </li>
+
+
+        <div class="dropdown">
+          <a href="{{url_for('logout')}}"><button style="padding: 10px; margin: 5px;" class="dropbtn">Logout</button>
+          <div class="dropdown-content">
+        
+          </div>
+        </div></a>
+        
         {% endif %}
        
       </ul>
