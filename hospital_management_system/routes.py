@@ -172,7 +172,8 @@ def issue_medicines():
         patient = Patient.query.filter_by(id=p_id).first()
         if patient:
             med_is = MedicinesIssued.query.filter_by(p_id=p_id)
-            flash("Patient Found Successfully!")
+            if request.method == "GET":
+                flash("Patient Found Successfully!")
             data["found"] = True
         else:
             patient = ["id", "name", "age", "address", "doj", "type of room"]
@@ -189,6 +190,7 @@ def issue_medicines():
             db.session.add(med)
             db.session.commit()
             flash("Successfully Medicine Added!")
+            return redirect("/issue_medicines")
         
         if "issue" in request.form.keys():
             p_id = request.form.get("p_id")
@@ -232,7 +234,7 @@ def check_quantity():
         quantity = request.args.get("quantity")
         med = Medicines.query.filter_by(id=med_id).first()
         result = int(med.quantity_available) - int(quantity)
-        if result > 0:
+        if result >= 0:
             data["status"] = True
         else:
             data["status"] = False
