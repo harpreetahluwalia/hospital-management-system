@@ -1,5 +1,5 @@
 from flask import render_template, request, redirect, flash, session, jsonify
-from hospital_management_system.models import User, Patient
+from hospital_management_system.models import User, Patient, Medicines, MedicinesIssued
 from hospital_management_system import app, db
 from datetime import datetime
 
@@ -152,9 +152,87 @@ def patient_delete():
         db.session.commit()
         flash("Successfully Patient Deleted!!")
     return render_template("patient_delete.html", patient="active")
-#Search
+
 @app.route("/patient_view", methods=["GET","POST"])
 def patient_view():
     if not session.get("username"):
         return redirect("/login")
-    return render_template("patient_view.html", patient="active")
+    return render_template("patient_view.html")
+
+
+@app.route("/issue_medicines", methods=["GET","POST"])
+def issue_medicines():
+    if not session.get("username"):
+        return redirect("/login")
+    meds = Medicines.query.all()
+    
+    if "pid" in request.args.keys():
+        p_id = request.args.get("pid")
+        patient = Patient.query.filter_by(id=p_id).first()
+        if patient:
+            med_is = MedicinesIssued.query.filter_by(p_id=p_id)
+            flash("Patient Found Successfully!")
+        else:
+            patient = ["id", "name", "age", "address", "doj", "type of room"]
+            flash("Patient With this Id not found!!")
+    else:
+        patient = ["id", "name", "age", "address", "doj", "type of room"]
+    
+    if request.method=='POST':
+        if "add" in request.form.keys():
+            name = request.form.get("name")
+            quantity = request.form.get("quantity")
+            rate = request.form.get("rate")
+            med = Medicines(name=name,quantity_available=quantity,rate=rate)
+            db.session.add(med)
+            db.session.commit()
+            flash("Successfully Medicine Added!")
+        
+        if "issue" in request.form.keys():
+            p_id = request.form.get("p_id")
+            med_id = request.form.get("med")
+            quantity = request.form.get("quantity")
+            med = Medicines.query.filter_by(id=med_id).first()
+            result = int(med.quantity_available) - int(quantity)
+            med = Medicines.query.filter_by(id=med_id).update(dict(quantity_available=result))
+            db.session.commit()
+            med_issue = MedicinesIssued(p_id=p_id,med_id=med_id, quantity=quantity)
+            db.session.add(med_issue)
+            db.session.commit()
+            flash("Medicine Added in Issue List Sucessfully!!")
+        
+        if "update" in request.form.keys():
+            flash("Medicines issued successfully!!")
+
+    return render_template("issueMedicines.html", meds=meds, patient=patient, med_is=med_is)
+
+@app.route("/check_med", methods=["GET","POST"])
+def check_med():
+    data={}
+    if not session.get("username"):
+        return redirect("/login")
+    if "med_id" in request.args:
+        med_id = request.args.get("med_id")
+        med = Medicines.query.filter_by(id=med_id).first()
+        if int(med.quantity_available) > 0:
+            data["status"] = True
+        else:
+            data["status"] = False
+    return jsonify(data)
+
+@app.route("/check_quantity", methods=["GET","POST"])
+def check_quantity():
+    data={}
+    if not session.get("username"):
+        return redirect("/login")
+    if "med_id" in request.args:
+        med_id = request.args.get("med_id")
+        quantity = request.args.get("quantity")
+        med = Medicines.query.filter_by(id=med_id).first()
+        result = int(med.quantity_available) - int(quantity)
+        if result > 0:
+            data["status"] = True
+        else:
+            data["status"] = False
+            data["q"] = med.quantity_available
+    return jsonify(data)

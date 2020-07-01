@@ -28,3 +28,17 @@ class Patient(db.Model):
     city = db.Column(db.String(250), nullable=False)
     state = db.Column(db.String(250), nullable=False)
     status = db.Column(db.String(100), nullable=False)
+
+
+class Medicines(db.Model):
+    __table_args__ = {'sqlite_autoincrement': True}
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    quantity_available = db.Column(db.Integer, nullable=False)
+    rate = db.Column(db.Integer, nullable=False)
+
+
+class MedicinesIssued(db.Model):
+    med_id = db.Column(db.Integer, primary_key=True)
+    p_id = db.Column(db.Integer, nullable=False)
+    quantity = db.Column(db.Integer, nullable=False)

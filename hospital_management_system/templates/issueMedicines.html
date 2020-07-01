@@ -1,109 +1,317 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+{% extends 'base.html' %}
 
-	<link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css" integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ" crossorigin="anonymous">    <title>HMS</title>
-	<title>HMS</title>
-</head>
-<body>
+{% block title %}
+    Issue Medicines
+{% endblock %}
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-success">
-  <div class="collapse navbar-collapse justify-content-md-center">
-      <b><h1 style="color:white">Hospital Management System</h1></b>
-  </div>
-</nav>
+{% block style %}
+<style>
+    /* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
-<center>
-<h3> Pharmacy </h3>
-<br>
-<table class="pure-table">
-    <thead>
-        <tr>
-            <th>Patient-ID</th>
-            <th>Name</th>
-            <th>Age</th>
-            <th>Address</th>
-			<th>DOJ</th>
-            <th>Type of Room</th>
-        </tr>
-		
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
 
-    </thead>
-	<tbody>
-	<! one sample entry>
-        <tr class="pure-table-odd">
-            <td>1234</td>
-            <td>Joseph</td>
-            <td>56</td>
-            <td>Hyderabad</td>
-			<td>03-May-2019</td>
-			<td>Single</td>
-        </tr>
-		<! add other entries from database>
-	</tbody>
-	</table>
-	</br>
-<h3>Medicines Issued</h3>
+</style>
+{% endblock %}
 
-<table class="pure-table">
-    <thead>
-        <tr>
-            <th>Medicine</th>
-            <th>Quantity</th>
-            <th>Rate</th>
-            <th>Amount</th>
-			
-        </tr>
-		
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                  {% for message in messages %}
+                    {% if message == "Patient With this Id not found!!" %}
+                        <div class="alert alert-danger mt-3">{{message}}</div>
+                    {% else %}
+                        <div class="alert alert-success mt-3">{{message}}</div>
+                    {% endif %}
+                {% endfor %}
+                {% endif %}
+              {% endwith %}
+                    <h3 class="text-center mt-3"> Pharmacy </h3>
+                    <br>
+                    <table class="table table-bordered shadow-sm">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Patient-ID</th>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Address</th>
+                                <th>DOJ</th>
+                                <th>Type of Room</th>
+                            </tr>
+                            
+                    
+                        </thead>
+                        <tbody>
+                                <tr>
+                                    {% if patient.0 == 'id' %}
+                                        <td class="text-muted">{{patient.0}}</td>
+                                        <td class="text-muted">{{patient.1}}</td>
+                                        <td class="text-muted">{{patient.2}}</td>
+                                        <td class="text-muted">{{patient.3}}</td>
+                                        <td class="text-muted">{{patient.4}}</td>
+                                        <td class="text-muted">{{patient.5}}</td>
+                                    {% else %}
+                                        <td id="patient_id">{{patient.id}}</td>
+                                        <td>{{patient.age}}</td>
+                                        <td>{{patient.name}}</td>
+                                        <td>{{patient.address}}, {{patient.city}}, {{patient.state}}</td>
+                                        <td>{{patient.date_of_admission}}</td>
+                                        <td>{{patient.type_of_bed}}</td>
+                                    {% endif %}
+                                </tr>
+                            
+                        </tbody>
+                        </table>
+                        <div class="text-center">
+                        <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#patient">
+                        Search Patient
+                    </button>
+                </div>
+                        </br>
+                    <h3 class="text-center">Medicines Issued</h3>
+                    
+                    <table class="table table-bordered shadow-sm">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Medicine</th>
+                                <th>Quantity</th>
+                                <th>Rate</th>
+                                <th>Amount</th>
+                                
+                            </tr>
+                            
+                    
+                        </thead>
+                    
+                        <tbody>
+                            {% for i in med_is %}
+                                <tr>
+                                    {% for j in meds %}
+                                        {% if i.med_id == j.id %}
+                                            <td>{{j.name}}</td>
+                                            <td>{{i.quantity}}</td>
+                                            <td>{{j.rate}}</td>
+                                            <td>{{ '%0.2f' | format(j.rate * i.quantity|float)}}</td>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
 
-    </thead>
-<br>	
+                        </tbody>
+                        </table>
+                        <div class="text-center">
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#issue">
+                                Issue Medicine
+                            </button>
+                        </div>
+                        <br>
+                        <br>
+                <div class="row">
+                    <div class="col-md-10">
+                        <table class="table table-bordered shadow-sm">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Medicine</th>
+                                    <th>Quantity</th>
+                                    <th>Rate</th>
+                                    <th>Amount</th>
+                                </tr>
 
-	<tbody>
-	<! one sample entry>
-        <tr class="pure-table-odd">
-            <td>Paracetamol</td>
-            <td>10</td>
-			<td>55.0</td>
-			<td>550</td>
-        </tr>
-		<! add other entries>
-	</tbody>
-	</table>
-	</br>
-	<button type="submit" value="AddDiag">Issue Medicines</button>
-	<br><br>
-	
-<table class="pure-table">
-    <thead>
-        <tr>
-            <th>Medicine</th>
-            <th>Quantity</th>
-            <th>Rate</th>
-            <th>Amount</th>
-        </tr>
-		
+                            </thead>
+                            <tbody>
+                                {% for i in meds %}
+                                    <tr>
+                                        <td>{{i.name|title}}</td>
+                                        <td>{{i.quantity_available}}</td>
+                                        <td>{{i.rate}}</td>
+                                        <td>{{ '%0.2f' | format(i.rate * i.quantity_available|float)}}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-2 align-middle">
+                        <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-warning btn-block" data-toggle="modal" data-target="#add">
+                        Add
+                    </button>
+                    </div>
+                </div>
+                    <div class="text-center my-3">
+                        <form action="" method="POST">
+                            <button type="submit" class="btn btn-success btn-lg" name="update">Update</button>
+                        </form>
+                    </div>
+            </div>
+        </div>
+    </div>
 
-    </thead>
-	<tbody>
-	<! one sample entry>
-        <tr class="pure-table-odd">
-            <td>Paracetamol</td>
-            <td>10</td>
-			<td>55.0</td>
-			<td>550</td>
-        </tr>
-		<! add other entries>
-	</tbody>
-</table>
-<br>
-<button type="submit" value="Add">Add</button>
-<br><br><br>
+    
+    
+    <!-- Modal -->
+    <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Medicines</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                </div>
+                <form action="" method="POST">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="text" name="name" class="form-control" required placeholder="Enter Medicine Name" id="">
+                    </div>
+                    <div class="form-group">
+                        <input type="number" min="0" name="quantity" class="form-control" required placeholder="Enter Medicine Quantity" id="">
+                    </div>
+                    <div class="form-group">
+                        <input type="number" min="0" step="0.01" name="rate" placeholder="Enter Medicine Rate" class="form-control" required id="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" name="add" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
 
-<button type="submit" value="Update">Update</button>
+    
+    
+    <!-- Modal -->
+    <div class="modal fade" id="patient" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Search Patient by Patient ID</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                </div>
+                <form action="" method="GET">
+                <div class="modal-body">
+                    <div class="form-group">
+                      <input type="number" min="100000000" max="999999999" required name="pid" class="form-control" placeholder="Enter Patient ID">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
 
+    
+    
+    
+    <!-- Modal -->
+    <div class="modal fade" id="issue" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mtitle"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                </div>
+                <form action="" method="POST">
+                    <div class="modal-body">
+                        <input type="text" hidden id="abc_id" name="p_id">
+                        <div class="form-group">
+                            <small id="med_res" class="text-danger"></small>
+                            <select name="med" id="medi" class="form-control" onchange="check_med();">
+                                <option value="">--Select Medicine--</option>
+                                {% for i in meds %}
+                                    <option value="{{i.id}}">{{i.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <small id="q_res" class="text-danger"></small>
+                            <input type="number" id="quantity" disabled onkeyup="check_quantity();" class="form-control" name="quantity" placeholder="Quantity of Medicine" min="0" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" disabled name="issue" id="issue_submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        let pid = $("#patient_id").html();
+        $("#mtitle").html("Issue Medicine for "+pid);
+        $("#abc_id").val(pid);
+        document.getElementById('quantity').addEventListener('keydown', function(e) {
+            if (e.which === 38 || e.which === 40) {
+                e.preventDefault();
+            }
+        });
+    </script>
 
+    <script>
+        function check_med(){
+            med_id = $("#medi").val();
+            $.ajax({
+                url:"{{url_for('check_med')}}",
+                type:"get",
+                data:{med_id:med_id},
+                success:function(data){
+                    if(data["status"] == true){
+                        $("#med_res").html("");
+                        $("#issue_submit").removeAttr('disabled');
+                        $("#quantity").removeAttr('disabled');
+                    }
+                    else{
+                        $("#med_res").html("Medicine is not available");
+                        $("#issue_submit").attr('disabled','disabled');
+                        $("#quantity").attr('disabled','disabled');
 
-</body>
+                    }
+                }
+            })
+        }
+    </script>
+
+    <script>
+        function check_quantity(){
+            med_id = $("#medi").val();
+            quantity = $("#quantity").val();
+            $.ajax({
+                url:"{{url_for('check_quantity')}}",
+                type:"get",
+                data:{med_id:med_id,
+                    quantity:quantity},
+                success:function(data){
+                    if(data["status"] == true){
+                        $("#q_res").html("");
+                        $("#issue_submit").removeAttr('disabled');
+                    }
+                    else{
+                        $("#q_res").html("Quantity is not available.(Quantity = "+data["q"]+")");
+                        $("#issue_submit").attr('disabled','disabled');
+                    }
+                }
+            })
+        }
+    </script>
+{% endblock %}
+
