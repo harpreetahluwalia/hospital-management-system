@@ -39,6 +39,8 @@ class Medicines(db.Model):
 
 
 class MedicinesIssued(db.Model):
-    med_id = db.Column(db.Integer, primary_key=True)
+    __table_args__ = {'sqlite_autoincrement': True}
+    id = db.Column(db.Integer, primary_key=True)
+    med_id = db.Column(db.Integer, nullable=False)
     p_id = db.Column(db.Integer, nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
