@@ -379,5 +379,6 @@ def final_billing():
         p_id = request.args.get("pid")
         patient = Patient.query.filter_by(id=p_id).update(dict(status="Discharged"))
         db.session.commit()
-        return redirect("/")
+        patient = Patient.query.filter_by(id=p_id).first()
+        flash("Payment Done Successfully!!")
     return render_template("final_billing.html", patient=patient, med_is=med_is, meds=meds, tests=tests, test_is=test_is, data=data, username=session.get("username"))
