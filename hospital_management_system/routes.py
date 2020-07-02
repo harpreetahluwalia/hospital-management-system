@@ -53,8 +53,7 @@ def patient_register():
         p_id = request.form.get("PatientSSN")
         p_name = request.form.get("PatientName")
         age = request.form.get("PatientAge")
-        date = request.form.get("DateOfAdmin")
-        date = datetime.strptime(date,'%Y-%m-%d')
+        date = data["today_date"]
         bed = request.form.get("Bed")
         address = request.form.get("Address")
         state = request.form.get("State")
@@ -92,8 +91,8 @@ def patient_update():
         p_id = request.form.get("PatientId")
         p_name = request.form.get("PatientName")
         age = request.form.get("PatientAge")
-        date = request.form.get("DateOfAdmin")
-        date = datetime.strptime(date,'%Y-%m-%d')
+        # date = request.form.get("DateOfAdmin")
+        # date = datetime.strptime(date,'%Y-%m-%d')
         bed = request.form.get("Bed")
         address = request.form.get("Address")
         state = request.form.get("State")
@@ -102,12 +101,12 @@ def patient_update():
         data = dict(
             name = p_name, 
             age = age, 
-            date_of_admission = date, 
+            # date_of_admission = date, 
             type_of_bed = bed, 
             address = address, 
             state = state, 
             city = city, 
-            status = "Active"
+            # status = "Active"
         )
         patient = Patient.query.filter_by(id=p_id).update(data)
         db.session.commit()
