@@ -119,8 +119,7 @@ def get_patient():
     data={}
     if not session.get("username"):
         return redirect("/")
-    if session.get("username") != "admin":
-        return redirect("/")
+    
     if "pid" in request.args:
         pid = request.args.get("pid")
         patient = Patient.query.filter_by(id=pid).first()
@@ -143,8 +142,6 @@ def get_patient():
 def check_patient():
     data={}
     if not session.get("username"):
-        return redirect("/")
-    if session.get("username") != "admin":
         return redirect("/")
     if "pssn" in request.args:
         pssn = request.args.get("pssn")
@@ -235,8 +232,7 @@ def check_med():
     data={}
     if not session.get("username"):
         return redirect("/")
-    if session.get("username") != "pharma":
-        return redirect("/")
+
     if "med_id" in request.args:
         med_id = request.args.get("med_id")
         med = Medicines.query.filter_by(id=med_id).first()
@@ -251,8 +247,7 @@ def check_quantity():
     data={}
     if not session.get("username"):
         return redirect("/")
-    if session.get("username") != "pharma":
-        return redirect("/")
+
     if "med_id" in request.args:
         med_id = request.args.get("med_id")
         quantity = request.args.get("quantity")
@@ -322,8 +317,7 @@ def get_diagnostic():
     data={}
     if not session.get("username"):
         return redirect("/")
-    if session.get("username") != "diagnostic":
-        return redirect("/")
+
     if "dname" in request.args:
         dname = request.args.get("dname")
         test = Diagnostic_test.query.filter_by(test_name=dname).first()
