@@ -3,7 +3,7 @@ from hospital_management_system.models import User, Patient, Medicines, Medicine
 from hospital_management_system import app, db
 from datetime import datetime
 
-@app.route('/')
+@app.route('/' , methods=["GET","POST"])
 def home():
     db.create_all()
     db.session.commit()
@@ -285,8 +285,7 @@ def diagnostics_add(pid):
         db.session.add(diag)
         db.session.commit()
         flash("Diagnostic Added Sucessfully!!")
-
-        
+        return redirect(url_for('diagnostics_add', pid=pid))
     return render_template("diagnostics_add.html", obj = obj, pid=pid, new = new)
 
 #get_diagnostic test charge
@@ -301,3 +300,58 @@ def get_diagnostic():
         if test:
             data["cost"] = test.test_cost
     return jsonify(data)
+
+@app.route("/final_billing", methods=["GET","POST"])
+def final_billing():
+    data = {}
+    if not session.get("username"):
+        return redirect("/login")
+    meds = Medicines.query.all()
+    tests = Diagnostic_test.query.all()
+    med_is = ""
+    test_is = ""
+    if "pid" in request.args.keys():
+        p_id = request.args.get("pid")
+        patient = Patient.query.filter_by(id=p_id).first()
+        if patient:
+            data["today_date"] = datetime.now().date()
+            data["days"] = str(data["today_date"] - patient.date_of_admission)[0]
+            room_bill = ""
+            if patient.type_of_bed == "General Ward":
+                data["room_bill"] = int(data["days"]) * 2000
+                room_bill = int(data["days"]) * 2000
+            elif patient.type_of_bed == "Semi Sharing":
+                data["room_bill"] = int(data["days"]) * 4000
+                room_bill = int(data["days"]) * 4000
+            else:
+                data["room_bill"] = int(data["days"]) * 8000
+                room_bill = int(data["days"]) * 8000
+            med_is = MedicinesIssued.query.filter_by(p_id=p_id)
+            p_bill = []
+            for i in med_is:
+                for j in meds:
+                    if i.med_id == j.id:
+                        p_bill.append(j.rate*i.quantity)
+            data["p_bill"] = sum(p_bill)
+            test_is = DiagnosticIssued.query.filter_by(p_id=p_id)
+            test_bill = []
+            for i in test_is:
+                for j in tests:
+                    if i.test_id == j.id:
+                       test_bill.append(j.test_cost)
+            data["test_bill"] = sum(test_bill)         
+            data["total_bill"] = data["test_bill"] + data["p_bill"] + room_bill         
+            if request.method == "GET":
+                flash("Patient Found Successfully!")
+        else:
+            patient = ["id", "name", "age", "address", "doj", "type of room"]
+            flash("Patient With this Id not found!!")
+    else:
+        patient = ["id", "name", "age", "address", "doj", "type of room"]
+
+    if request.method == "POST":
+        p_id = request.args.get("pid")
+        patient = Patient.query.filter_by(id=p_id).update(dict(status="Discharged"))
+        db.session.commit()
+        return redirect("/")
+    return render_template("final_billing.html", patient=patient, med_is=med_is, meds=meds, tests=tests, test_is=test_is, data=data)
