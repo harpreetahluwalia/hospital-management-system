@@ -3,27 +3,32 @@ from hospital_management_system.models import User, Patient, Medicines, Medicine
 from hospital_management_system import app, db
 from datetime import datetime
 
-@app.route('/' , methods=["GET","POST"])
-def home():
-    db.create_all()
-    db.session.commit()
-    if not session.get("username"):
-        return redirect("/login")
-    return render_template('home.html')
 
-
-@app.route('/login', methods=["GET","POST"])
+@app.route('/', methods=["GET","POST"])
 def login():
-    if session.get("username"):
-        return redirect("/")
+    # if session.get("username"):
+    #     if session.get("username") == "admin":
+    #         return redirect("/patient_register")
+
+    #     elif session.get("username") == "pharma":
+    #         return redirect("/issue_medicines")
+        
+    #     elif session.get("username") == "diagnostic":
+    #         return redirect("/diag_patient_details")
+
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
-        admin = User.query.filter_by(username='admin').first()
+        admin = User.query.filter_by(username=username).first()
         if admin and password == admin.password:
             session["user_id"] = admin.user_id
             session["username"] = username
-            return redirect("/")
+            if username == "admin":
+                return redirect("/patient_register")
+            elif username == "pharma":
+                return redirect("/issue_medicines")
+            elif username == "diagnostic":
+                return redirect("/diag_patient_details")
         else:
             flash("Sorry, something went wrong.")
 
@@ -33,14 +38,16 @@ def login():
 def logout():
     session["user_id"] = False
     session["username"] = False
-    return redirect("/login")
+    return redirect("/")
 
 
 @app.route("/patient_register", methods=["GET","POST"])
 def patient_register():
     data = {}
     if not session.get("username"):
-        return redirect("/login")
+        return redirect("/")
+    if session.get("username") != "admin":
+        return redirect("/")
     data["today_date"] = datetime.now().date()
     if request.method == "POST":
         p_id = request.form.get("PatientSSN")
@@ -63,21 +70,24 @@ def patient_register():
 
         flash("Successfully Patient Added!!")
 
-    return render_template("patient_register.html", patient="active", data=data)
+    return render_template("patient_register.html", patient="active", data=data, username=session.get("username"))
 
 @app.route("/patient_list")
 def patient_list():
     if not session.get("username"):
-        return redirect("/login")
-
+        return redirect("/")
+    if session.get("username") != "admin":
+        return redirect("/")
     patients = Patient.query.all()
     
-    return render_template("patient_list.html", patient="active", patients=patients)
+    return render_template("patient_list.html", patient="active", patients=patients, username=session.get("username"))
 
 @app.route("/patient_update", methods=["GET","POST"])
 def patient_update():
     if not session.get("username"):
-        return redirect("/login")
+        return redirect("/")
+    if session.get("username") != "admin":
+        return redirect("/")
     if request.method == "POST":
         p_id = request.form.get("PatientId")
         p_name = request.form.get("PatientName")
@@ -102,13 +112,15 @@ def patient_update():
         patient = Patient.query.filter_by(id=p_id).update(data)
         db.session.commit()
         flash("Successfully Patient Updated!!")
-    return render_template("patient_update.html", patient="active")
+    return render_template("patient_update.html", username=session.get("username"))
 
 @app.route("/get_patient", methods=["GET","POST"])
 def get_patient():
     data={}
     if not session.get("username"):
-        return redirect("/login")
+        return redirect("/")
+    if session.get("username") != "admin":
+        return redirect("/")
     if "pid" in request.args:
         pid = request.args.get("pid")
         patient = Patient.query.filter_by(id=pid).first()
@@ -131,7 +143,9 @@ def get_patient():
 def check_patient():
     data={}
     if not session.get("username"):
-        return redirect("/login")
+        return redirect("/")
+    if session.get("username") != "admin":
+        return redirect("/")
     if "pssn" in request.args:
         pssn = request.args.get("pssn")
         patient = Patient.query.filter_by(ssid=pssn).first()
@@ -144,27 +158,33 @@ def check_patient():
 @app.route("/patient_delete", methods=["GET","POST"])
 def patient_delete():
     if not session.get("username"):
-        return redirect("/login")
+        return redirect("/")
+    if session.get("username") != "admin":
+        return redirect("/")
     if request.method == "POST":
         p_id = request.form.get("PatientId")
         patient = Patient.query.filter_by(id=p_id).first()
         db.session.delete(patient)
         db.session.commit()
         flash("Successfully Patient Deleted!!")
-    return render_template("patient_delete.html", patient="active")
+    return render_template("patient_delete.html", username=session.get("username"))
 
 @app.route("/patient_view", methods=["GET","POST"])
 def patient_view():
     if not session.get("username"):
-        return redirect("/login")
-    return render_template("patient_view.html")
+        return redirect("/")
+    if session.get("username") != "admin":
+        return redirect("/")
+    return render_template("patient_view.html", username=session.get("username"))
 
 
 @app.route("/issue_medicines", methods=["GET","POST"])
 def issue_medicines():
     data = {}
     if not session.get("username"):
-        return redirect("/login")
+        return redirect("/")
+    if session.get("username") != "pharma":
+        return redirect("/")
     meds = Medicines.query.all()
     med_is = ""
     if "pid" in request.args.keys():
@@ -208,13 +228,15 @@ def issue_medicines():
         if "update" in request.form.keys():
             flash("Medicines issued successfully!!")
 
-    return render_template("issueMedicines.html", meds=meds, patient=patient, med_is=med_is, data=data)
+    return render_template("issueMedicines.html", meds=meds, patient=patient, med_is=med_is, data=data, username=session.get("username"))
 
 @app.route("/check_med", methods=["GET","POST"])
 def check_med():
     data={}
     if not session.get("username"):
-        return redirect("/login")
+        return redirect("/")
+    if session.get("username") != "pharma":
+        return redirect("/")
     if "med_id" in request.args:
         med_id = request.args.get("med_id")
         med = Medicines.query.filter_by(id=med_id).first()
@@ -228,7 +250,9 @@ def check_med():
 def check_quantity():
     data={}
     if not session.get("username"):
-        return redirect("/login")
+        return redirect("/")
+    if session.get("username") != "pharma":
+        return redirect("/")
     if "med_id" in request.args:
         med_id = request.args.get("med_id")
         quantity = request.args.get("quantity")
@@ -247,7 +271,9 @@ def check_quantity():
 @app.route("/diag_patient_details", methods=["GET","POST"])
 def diag_patient_details():
     if not session.get("username"):
-        return redirect("/login")
+        return redirect("/")
+    if session.get("username") != "diagnostic":
+        return redirect("/")
     if request.method == "POST":
         pid = request.form.get("PatientId")
         pat = Patient.query.filter_by(id=pid).first()
@@ -255,13 +281,15 @@ def diag_patient_details():
             return redirect(url_for('diagnostics_add', pid=pid))
         else:
             return render_template("diag_patient_details.html")
-    return render_template("diag_patient_details.html")
+    return render_template("diag_patient_details.html", username=session.get("username"))
 
 #Add Diagnostics
 @app.route("/diagnostics_add/<pid>", methods=["GET","POST"])
 def diagnostics_add(pid):
     if not session.get("username"):
-        return redirect("/login")
+        return redirect("/")
+    if session.get("username") != "diagnostic":
+        return redirect("/")
     obj = Diagnostic_test.query.all()
     res = DiagnosticIssued.query.filter_by(p_id=pid).all()
     lis=[]
@@ -286,14 +314,16 @@ def diagnostics_add(pid):
         db.session.commit()
         flash("Diagnostic Added Sucessfully!!")
         return redirect(url_for('diagnostics_add', pid=pid))
-    return render_template("diagnostics_add.html", obj = obj, pid=pid, new = new)
+    return render_template("diagnostics_add.html", obj = obj, pid=pid, new = new, username=session.get("username"))
 
 #get_diagnostic test charge
 @app.route("/get_diagnostic", methods=["GET","POST"])
 def get_diagnostic():
     data={}
     if not session.get("username"):
-        return redirect("/login")
+        return redirect("/")
+    if session.get("username") != "diagnostic":
+        return redirect("/")
     if "dname" in request.args:
         dname = request.args.get("dname")
         test = Diagnostic_test.query.filter_by(test_name=dname).first()
@@ -305,7 +335,9 @@ def get_diagnostic():
 def final_billing():
     data = {}
     if not session.get("username"):
-        return redirect("/login")
+        return redirect("/")
+    if session.get("username") != "admin":
+        return redirect("/")
     meds = Medicines.query.all()
     tests = Diagnostic_test.query.all()
     med_is = ""
@@ -354,4 +386,4 @@ def final_billing():
         patient = Patient.query.filter_by(id=p_id).update(dict(status="Discharged"))
         db.session.commit()
         return redirect("/")
-    return render_template("final_billing.html", patient=patient, med_is=med_is, meds=meds, tests=tests, test_is=test_is, data=data)
+    return render_template("final_billing.html", patient=patient, med_is=med_is, meds=meds, tests=tests, test_is=test_is, data=data, username=session.get("username"))

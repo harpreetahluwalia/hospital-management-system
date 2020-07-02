@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand font-weight-bolder" href="{{url_for('home')}}">Hospital Management System</a>
+    <a class="navbar-brand font-weight-bolder">Hospital Management System</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -8,14 +8,8 @@
         {% if Login %}
         {% else %}
        
-        <div class="dropdown">
-          <a href="{{url_for('home')}}"><button style="padding: 10px; margin: 5px;" class="dropbtn">Home</button>
-          <div class="dropdown-content">
-        
-          </div>
-        </div></a>
 
-
+        {% if username == "admin" %}
         <div class="dropdown">
           <a href="{{url_for('patient_list')}}"><button style="padding: 10px; margin: 5px;" class="dropbtn">Patient</button></a>
           <div class="dropdown-content">
@@ -27,7 +21,9 @@
       
           </div>
         </div>
-      
+        {% endif %}
+
+        {% if username == "pharma" %}
         <div class="dropdown">
           <button style="padding: 10px; margin: 5px;" class="dropbtn">Pharmacy</button>
           <div class="dropdown-content">
@@ -35,20 +31,25 @@
         
           </div>
         </div>
-      
+        {% endif %}
+
+        {% if username == "diagnostic" %}
         <div class="dropdown">
           <button style="padding: 10px; margin: 5px;" class="dropbtn">Diagnostics</button>
           <div class="dropdown-content">
             <a href="{{url_for('diag_patient_details')}}">Add Diagnostics</a>
         
           </div>
-        
+          {% endif %}
+
+          {% if username == "admin" %}
           <div class="dropdown">
             <a href="{{url_for('final_billing')}}"><button style="padding: 10px; margin: 5px;" class="dropbtn">Final Billing</button>
               <div class="dropdown-content">
             
               </div>
             </div></a>
+            {% endif %}
 
 
 
