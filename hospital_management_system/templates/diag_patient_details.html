@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Get Patient Details
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-5 mx-auto mt-3 shadow rounded border">
+			{% with messages = get_flashed_messages() %}
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert alert-warning mt-3">{{message}}</div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+			<h2 class="text-center my-2">Get Patient Details</h2>
+			<form action="" method="POST">
+				<div class="form-group">
+					<label for="PatientId"><b>Patient ID*</b></label> <small class="ml-5 text-danger" id="result"></small>
+					<div class="input-group mb-3">
+	 					<input type="text" placeholder="Enter Patient ID" name="PatientId" id="PatientId" required class="form-control">
+						<div class="input-group-append get">
+							<button class="input-group-text" onclick="get_patient();">Get</button>
+						</div>
+					  </div>
+				</div>
+				<div class="form-group">
+					<label for="PatientName"><b>Patient Name*</b></label>
+	  				<input  class="form-control" type="text" placeholder="Enter patient's name" name="PatientName" id="PatientName" required>
+				</div>
+				<div class="form-group">
+					<label for="PatientAge"><b>Patient Age*</b></label>
+	 		 		<input class="form-control" type="number" placeholder="Enter patient's age" name="PatientAge" id="PatientAge" required>
+				</div>
+				<div class="form-group">
+					<label for="DateOfAdmin"><b>Date of Admission*</b></label>
+	 	 			<input class="form-control" type="date" name="DateOfAdmin" id="DateOfAdmin" required>
+				</div>
+				
+				<div class="form-group">
+					<label for="Address"><b>Address*</b></label>
+					<textarea class="form-control" rows = "5" cols = "50" name = "Address" id="Address" required></textarea>
+				</div>
+
+				<div class="form-group text-center">
+					<button class="btn btn-success" id="submit" type="submit" value="submit">Add Diagnostics</button>	
+				</div>
+			</form>	
+				
+				
+		</div>
+	</div>
+</div>
+
+<script>
+	function get_patient(){
+		pid = $("#PatientId").val();
+		$.ajax({
+            url:"{{url_for('get_patient')}}",
+            type:"get",
+            data:{pid:pid},
+            success:function(data){
+				if(data["status"] == true){
+					$("#result").html("");
+					$("#PatientName").val(data["name"]).attr("disabled","disabled");
+					$("#PatientAge").val(data["age"]).attr("disabled","disabled");
+					$("#DateOfAdmin").val(data["date"]).attr("disabled","disabled");
+					$("#Address").val(data["address"]).attr("disabled","disabled");
+					$("#submit").removeAttr('disabled')
+				}
+				else{
+					$("#result").html("* Patient Id is not exist! Please try again *");
+					$("#submit").attr('disabled','disabled')
+					
+				}
+			}
+        })
+	}
+</script>
+
+{% endblock %}
+
+
+

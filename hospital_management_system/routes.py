@@ -1,5 +1,5 @@
-from flask import render_template, request, redirect, flash, session, jsonify
-from hospital_management_system.models import User, Patient, Medicines, MedicinesIssued
+from flask import render_template, request, redirect, flash, session, jsonify, url_for
+from hospital_management_system.models import User, Patient, Medicines, MedicinesIssued, MedicinesIssued, Diagnostic_test, DiagnosticIssued
 from hospital_management_system import app, db
 from datetime import datetime
 
@@ -239,4 +239,65 @@ def check_quantity():
         else:
             data["status"] = False
             data["q"] = med.quantity_available
+    return jsonify(data)
+
+
+#Diagnostics Screen
+#Get Patient Details
+@app.route("/diag_patient_details", methods=["GET","POST"])
+def diag_patient_details():
+    if not session.get("username"):
+        return redirect("/login")
+    if request.method == "POST":
+        pid = request.form.get("PatientId")
+        pat = Patient.query.filter_by(id=pid).first()
+        if pat:
+            return redirect(url_for('diagnostics_add', pid=pid))
+        else:
+            return render_template("diag_patient_details.html")
+    return render_template("diag_patient_details.html")
+
+#Add Diagnostics
+@app.route("/diagnostics_add/<pid>", methods=["GET","POST"])
+def diagnostics_add(pid):
+    if not session.get("username"):
+        return redirect("/login")
+    obj = Diagnostic_test.query.all()
+    res = DiagnosticIssued.query.filter_by(p_id=pid).all()
+    lis=[]
+    for p in res:
+        lis.append(p.test_id)
+    d={}
+    result = Diagnostic_test.query.all()
+    for i in result:
+        d[i.id] = (i.test_name, i.test_cost)
+    new=[]
+    for j in lis:
+        new.append([d[j][0], d[j][1]])
+
+
+    if request.method == "POST":
+        test_name = request.form.get("test")
+        test = Diagnostic_test.query.filter_by(test_name=test_name).first()
+        p = DiagnosticIssued.query.filter_by(test_id=test.id).first()
+        
+        diag = DiagnosticIssued(p_id=pid, test_id=test.id)
+        db.session.add(diag)
+        db.session.commit()
+        flash("Diagnostic Added Sucessfully!!")
+
+        
+    return render_template("diagnostics_add.html", obj = obj, pid=pid, new = new)
+
+#get_diagnostic test charge
+@app.route("/get_diagnostic", methods=["GET","POST"])
+def get_diagnostic():
+    data={}
+    if not session.get("username"):
+        return redirect("/login")
+    if "dname" in request.args:
+        dname = request.args.get("dname")
+        test = Diagnostic_test.query.filter_by(test_name=dname).first()
+        if test:
+            data["cost"] = test.test_cost
     return jsonify(data)

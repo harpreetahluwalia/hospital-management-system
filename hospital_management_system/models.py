@@ -44,3 +44,13 @@ class MedicinesIssued(db.Model):
     med_id = db.Column(db.Integer, nullable=False)
     p_id = db.Column(db.Integer, nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
+
+class Diagnostic_test(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    test_name = db.Column(db.String(80), nullable=False)
+    test_cost = db.Column(db.Integer, nullable=False)
+
+class DiagnosticIssued(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    test_id = db.Column(db.Integer, nullable=False)
+    p_id = db.Column(db.Integer, nullable=False)
