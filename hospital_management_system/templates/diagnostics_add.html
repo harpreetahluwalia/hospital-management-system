@@ -16,7 +16,11 @@
               {% endfor %}
             {% endif %}
           {% endwith %}
-          <h3 class="text-center my-2">Diagnostic Issued</h3>
+          <!--<h3 class="text-center my-2">Diagnostic Conducted</h3>-->
+          <table>
+		  <tr>
+			  <td>
+			<h3 class="text-center my-2">Diagnostic Conducted</h3>
           <table class="table table-bordered shadow-sm">
                 <thead class="thead-dark">
                     <tr>
@@ -32,7 +36,30 @@
                     </tr>
                 {% endfor %}          
                 </tbody>
-          </table>
+		  </table>
+		</td>
+		<td>
+				<h3 class="text-center my-2">Medicine Issued</h3>
+				<table class="table table-bordered shadow-sm">
+					  <thead class="thead-dark">
+						  <tr>
+							   <th>Medicine Name</th>
+							   
+						  </tr>
+					  </thead>
+					  <tbody>
+					  {% for m in med  %}
+						  <tr> 
+							  <td class="text-muted">{{ m }}</td>
+							                                  
+						  </tr>
+					  {% endfor %}          
+					  </tbody>
+				</table>
+		
+		</td>
+		  </tr>
+		</table>
 
 
 			<h3 class="text-center my-2">Add Diagnostic Test for Patient ID {{pid}}</h3><!-- for patient ID (have to add) -->

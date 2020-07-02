@@ -16,7 +16,9 @@
               {% endfor %}
             {% endif %}
           {% endwith %}
-			<h2 class="text-center my-2">Get Patient Details</h2>
+
+          	
+			<h3 class="text-center my-2">Get Patient Details</h3>
 			<form action="" method="POST">
 				<div class="form-group">
 					<label for="PatientId"><b>Patient ID*</b></label> <small class="ml-5 text-danger" id="result"></small>
@@ -45,10 +47,14 @@
 					<textarea class="form-control" rows = "5" cols = "50" name = "Address" id="Address" required></textarea>
 				</div>
 
+
 				<div class="form-group text-center">
-					<button class="btn btn-success" id="submit" type="submit" value="submit">Add Diagnostics</button>	
+					<button class="btn btn-success" id="submit" type="submit" value="submit">Add Diagnostics to Patient</button>	
 				</div>
 			</form>	
+			<div class="form-group text-center">
+				<a href="/diag_test_add"> <button class="btn btn-success">Add New Diagnostic Test</button> </a>
+			</div>
 				
 				
 		</div>

@@ -277,6 +277,24 @@ def diag_patient_details():
             return render_template("diag_patient_details.html")
     return render_template("diag_patient_details.html", username=session.get("username"))
 
+#Add new test
+@app.route("/diag_test_add", methods=["GET","POST"])
+def diag_test_add():
+    if not session.get("username"):
+        return redirect("/")
+    if session.get("username") != "diagnostic":
+        return redirect("/")
+    if request.method == "POST":
+        name = request.form.get("TestName")
+        cost = request.form.get("TestCost")
+        dia = Diagnostic_test(test_name=name, test_cost=cost)
+        db.session.add(dia)
+        db.session.commit()
+        flash("Successfully New Diagnostic Test Added!")
+        #return redirect("/diag_patient_details")
+    return render_template("diag_test_add.html", username=session.get("username"))
+
+
 #Add Diagnostics
 @app.route("/diagnostics_add/<pid>", methods=["GET","POST"])
 def diagnostics_add(pid):
@@ -284,6 +302,7 @@ def diagnostics_add(pid):
         return redirect("/")
     if session.get("username") != "diagnostic":
         return redirect("/")
+    #get diagnostics conducted
     obj = Diagnostic_test.query.all()
     res = DiagnosticIssued.query.filter_by(p_id=pid).all()
     lis=[]
@@ -297,6 +316,15 @@ def diagnostics_add(pid):
     for j in lis:
         new.append([d[j][0], d[j][1]])
 
+    #get medicines issued
+    medres = MedicinesIssued.query.filter_by(p_id=pid).all()
+    medid = []
+    for m in medres:
+        medid.append(m.id)
+    med=[]
+    for a in medid:
+        med.append(Medicines.query.get(1).name)
+
 
     if request.method == "POST":
         test_name = request.form.get("test")
@@ -308,7 +336,7 @@ def diagnostics_add(pid):
         db.session.commit()
         flash("Diagnostic Added Sucessfully!!")
         return redirect(url_for('diagnostics_add', pid=pid))
-    return render_template("diagnostics_add.html", obj = obj, pid=pid, new = new, username=session.get("username"))
+    return render_template("diagnostics_add.html", obj = obj, pid=pid, new = new, med=med, username=session.get("username"))
 
 #get_diagnostic test charge
 @app.route("/get_diagnostic", methods=["GET","POST"])
