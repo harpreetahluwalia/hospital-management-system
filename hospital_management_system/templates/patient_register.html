@@ -20,7 +20,7 @@
 			<form action="" method="POST">
 				<div class="form-group">
 					<label for="PatientSSN"><b>Patient SSN ID*</b></label> <small class="ml-5 text-danger" id="result"></small>
-	 				<input type="text" onkeyup="check_patient();" placeholder="Enter SSN ID" name="PatientSSN" id="PatientSSN" max="999999999" required class="form-control">
+	 				<input type="text" onkeyup="check_patient();" title="SSN ID should contain 9 charater." pattern="([A-z0-9]){9}" placeholder="Enter SSN ID" name="PatientSSN" id="PatientSSN" required class="form-control">
 				</div>
 				<div class="form-group">
 					<label for="PatientName"><b>Patient Name*</b></label>
@@ -50,11 +50,11 @@
 				</div>
 				<div class="form-group">
 					<label for="State"><b>State*</b></label>
-	  				<input pattern="[a-zA-Z]*" title='Please enter on alphabets only. ' class="form-control" type="text"  name="State" id="State" required>
+	  				<input pattern="^[A-Za-z -]+$" title='Please enter on alphabets only. ' class="form-control" type="text"  name="State" id="State" required>
 				</div>
 				<div class="form-group">
 					<label for="City"><b>City*</b></label>
-	  				<input pattern="[a-zA-Z]*" title='Please enter on alphabets only. ' class="form-control" type="text" name="City" id="City" required>
+	  				<input pattern="^[A-Za-z -]+$" title='Please enter on alphabets only. ' class="form-control" type="text" name="City" id="City" required>
 				</div>
 				<div class="form-group text-right">
 					<button class="btn btn-success" type="submit" id="submit" disabled>Submit</button>
