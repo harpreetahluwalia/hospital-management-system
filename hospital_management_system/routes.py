@@ -121,7 +121,7 @@ def get_patient():
     
     if "pid" in request.args:
         pid = request.args.get("pid")
-        patient = Patient.query.filter_by(id=pid).first()
+        patient = Patient.query.filter_by(id=pid,).first()
         if patient:
             data["status"] = True
             #data["id"] = patient.id
